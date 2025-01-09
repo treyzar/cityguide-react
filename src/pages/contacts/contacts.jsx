@@ -4,6 +4,7 @@ export default function Contacts() {
     <>
       <Header />
       <h1>Contacts page</h1>
+      <h2></h2>
     </>
   );
 }
