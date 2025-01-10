@@ -5,11 +5,13 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import Sign from './pages/signin/signin';
-import Main from './pages/main/main';
-import Contacts from './pages/contacts/contacts';
-import Attractions from './pages/attractions/attractions';
-import Registration from './pages/registration/registration';
+
+import Sign from './components/pages/signin/signin.jsx';
+import Contacts from './components/pages/contacts/contacts.jsx';
+import Attractions from './components/pages/attractions/attractions.jsx';
+import Registration from './components/pages/registration/registration.jsx';
+import Main from './components/pages/main/main.jsx';
+
 import LogoLink from './components/general/header/logolink.jsx';
 
 function App() {
