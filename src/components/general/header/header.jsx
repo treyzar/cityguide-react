@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import logo from './images/logo2.png';
 import './header.css';
@@ -7,6 +7,12 @@ import NavbarMenu from './navbar-menu';
 import LogoLink from './logolink';
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,8 +27,8 @@ export default function Header() {
       />
       <nav className="navbar">
         <LogoLink />
-        <Navbar />
-        <NavbarMenu />
+        <Navbar toggleMenu={toggleMenu} />
+        <NavbarMenu isMenuOpen={isMenuOpen} />
       </nav>
     </>
   );
