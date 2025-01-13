@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from '../../general/footer/footer';
 import Header from '../../general/header/header';
 import Title from './title';
@@ -16,11 +16,11 @@ export default function Contacts() {
             <div className="modalSection__container-box-1">
               <Title />
               <Social
-                name="Telegram: "
+                name="Telegram "
                 url="https://web.telegram.org/a/#996599138"
               />
-              <Social name="Vk: " url="https://vk.com/rikimauzer" />
-              <Social name="GitHub: " url="https://github.com/treyzar" />
+              <Social name="Vk " url="https://vk.com/rikimauzer" />
+              <Social name="GitHub " url="https://github.com/treyzar" />
             </div>
             <Modal />
           </div>

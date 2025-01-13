@@ -1,8 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './contacts.scss';
 
 const Modal = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('name');
+    const savedEmail = localStorage.getItem('email');
+    const savedPhone = localStorage.getItem('phone');
+
+    if (savedName) {
+      setName(savedName);
+    }
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+    if (savedPhone) {
+      setPhone(savedPhone);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('name', name);
+    localStorage.setItem('email', email);
+    localStorage.setItem('phone', phone);
+  }, [name, email, phone]);
+
+  const handleNameChange = e => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = e => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhoneChange = e => {
+    setPhone(e.target.value);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    console.log('Данные отправлены:', { name, email, phone });
+
+    setName('');
+    setEmail('');
+    setPhone('');
+
+    setIsModalVisible(false);
+  };
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -12,10 +61,17 @@ const Modal = () => {
     setIsModalVisible(false);
   };
 
-  const handleSubmitForm = () => {
-    alert('Форма отправлена!');
-    handleCloseModal();
-  };
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.key === 'Escape' && isModalVisible) {
+        handleCloseModal();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalVisible]);
 
   return (
     <div>
@@ -39,7 +95,7 @@ const Modal = () => {
             className="modal__close"
             onClick={handleCloseModal}
             onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+              if (e.key === 'Enter' || e.key === ' ' || e.key === 'Esc') {
                 handleCloseModal();
               }
             }}
@@ -50,21 +106,29 @@ const Modal = () => {
             &times;
           </span>
 
-          <form className="modal__form">
-            <input type="text" name="name" placeholder="Name" />
-            <input type="email" name="email" placeholder="Email" />
-            <input type="text" name="phone" placeholder="Phone" />
-            <button
-              type="button"
-              onClick={handleSubmitForm}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleSubmitForm();
-                }
-              }}
-            >
-              Submit
-            </button>
+          <form className="modal__form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              onChange={handleNameChange}
+              value={name}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleEmailChange}
+              value={email}
+            />
+            <input
+              type="number"
+              name="phone"
+              placeholder="Phone"
+              onChange={handlePhoneChange}
+              value={phone}
+            />
+            <button type="submit">Submit</button>
           </form>
         </div>
       </div>
