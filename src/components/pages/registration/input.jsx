@@ -1,6 +1,15 @@
 import React from 'react';
 
-export default function Input({ type, id, name, min, max, place }) {
+export default function Input({
+  type,
+  id,
+  name,
+  min,
+  max,
+  place,
+  value,
+  onChange,
+}) {
   return (
     <input
       className="form-input"
@@ -11,6 +20,8 @@ export default function Input({ type, id, name, min, max, place }) {
       minLength={min}
       maxLength={max}
       placeholder={place}
+      value={value}
+      onChange={onChange}
     />
   );
 }

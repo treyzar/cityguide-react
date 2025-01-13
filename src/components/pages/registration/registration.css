@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 a {
@@ -26,7 +26,7 @@ body {
   margin-top: 100px;
   margin-bottom: 100px;
   -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.73);
   padding: 50px 35px;
 }
@@ -88,7 +88,7 @@ body {
 }
 
 .submit-button:hover {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.084);
 }
 
 .have-account {
@@ -113,9 +113,7 @@ body {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.203);
   color: #080710;
-  transition:
-    background-color 1s ease,
-    color 1s ease;
+  transition: background-color 1s ease, color 1s ease;
   padding: 15px 0;
   font-size: 18px;
   font-weight: 600;
