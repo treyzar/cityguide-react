@@ -1,0 +1,213 @@
+@charset "UTF-8";
+/* Основные стили для модального окна */
+.modal {
+  display: none; /* По умолчанию скрыто */
+  position: fixed;
+  z-index: 1000;
+  /* Анимация появления */
+  /* Кнопка закрытия */
+  /* Форма */
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal .contacts {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
+.modal body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+.modal .openModal {
+  display: flex;
+  justify-content: center;
+}
+.modal .openModalBtn {
+  height: 30px;
+  width: 125px;
+  font-size: 13px;
+  background-color: rgba(0, 0, 0, 0.203);
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+.modal .modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-in-out; /* Анимация появления */
+}
+.modal .modal.open {
+  display: flex; /* Показываем модалку */
+  justify-content: center;
+  align-items: center;
+}
+.modal .modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideIn 0.3s ease-in-out; /* Анимация появления */
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.modal .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #aaa;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+}
+.modal .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  position: relative;
+  border-radius: 10px;
+}
+.modal .close {
+  color: #aaa;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal .close:hover,
+.modal .close:focus {
+  color: #000;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+}
+
+form input:focus {
+  border-color: #000;
+  outline: none;
+}
+
+form button {
+  padding: 12px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+form button:hover {
+  background-color: #333;
+}
+
+/* Кнопка открытия модалки */
+.openModalBtn {
+  height: 40px;
+  width: 150px;
+  font-size: 14px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.openModalBtn:hover {
+  background-color: rgb(0, 0, 0);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+form button {
+  padding: 10px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+form button:hover {
+  background-color: #3b3b3b;
+}
+
+.main {
+  height: 725px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.main__container-box-1 {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.main__container-box-1-title {
+  color: #fff;
+  font-size: 50px;
+}
+.main__container-box-1-subtitle {
+  color: #fff;
+  font-size: 40px;
+}
+.main__container-box-1-social {
+  color: #777;
+  transition: color 0.5s linear;
+}
+.main__container-box-1-social:hover {
+  color: #000000;
+}

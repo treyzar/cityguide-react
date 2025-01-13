@@ -19,11 +19,12 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "react-hooks", "jsx-a11y", "import"],
+  "plugins": ["react", "react-hooks", "jsx-a11y", "import", "no-comments"],
   "rules": {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": "warn",
+    "no-comments/no-comments": "warn", // Добавлено правило для комментариев
     "import/order": [
       "warn",
       {
@@ -53,5 +54,8 @@
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
-  }
+  },
+    "globals": {
+      "AudioWorkletGlobalScope": "readonly"
+    }
 }
