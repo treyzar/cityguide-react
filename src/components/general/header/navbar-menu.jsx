@@ -6,6 +6,13 @@ export default function NavbarMenu() {
     <>
       <nav>
         <ul className="navbar-menu" id="navbarMenu">
+          {location.pathname !== '/attractions' && (
+            <li className="navbar-menu-text">
+              <Link to="/attractions" className="navbar-menu-text">
+                Достопримечательности
+              </Link>{' '}
+            </li>
+          )}
           {location.pathname !== '/main' && (
             <li className="navbar-menu-text">
               <Link to="/" className="navbar-menu-text">
@@ -20,11 +27,11 @@ export default function NavbarMenu() {
               </Link>{' '}
             </li>
           )}
-          {location.pathname !== '/attractions' && (
+          {location.pathname !== '/registration' && (
             <li className="navbar-menu-text">
-              <Link to="/attractions" className="navbar-menu-text">
-                Достопримечательности
-              </Link>{' '}
+              <Link to="/registration" className="navbar-menu-text">
+                Зарегистрироваться
+              </Link>
             </li>
           )}
           {location.pathname !== '/sign' && (
@@ -32,13 +39,6 @@ export default function NavbarMenu() {
               <Link to="/sign" className="navbar-menu-text">
                 Войти
               </Link>{' '}
-            </li>
-          )}
-          {location.pathname !== '/registration' && (
-            <li className="navbar-menu-text">
-              <Link to="/registration" className="navbar-menu-text">
-                Зарегистрироваться
-              </Link>
             </li>
           )}
         </ul>

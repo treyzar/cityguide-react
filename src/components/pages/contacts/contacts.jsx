@@ -1,4 +1,4 @@
-import Header from '../../components/general/header/header';
+import Header from '../../general/header/header';
 export default function Contacts() {
   return (
     <>
