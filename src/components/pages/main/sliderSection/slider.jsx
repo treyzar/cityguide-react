@@ -17,34 +17,32 @@ const Slider = ({ images }) => {
     return () => clearInterval(interval);
   }, [currentSlide]);
   return (
-    <div className="slider">
-      <div className="slider__container">
-        <div className="slider__slider-img">
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Slide ${index}`}
-              style={{ display: index === currentSlide ? 'block' : 'none' }}
-            />
-          ))}
-        </div>
-        <button
-          className="prev-button"
-          onClick={prevSlide}
-          aria-label="Посмотреть предыдущий слайд"
-        >
-          &lt;
-        </button>
-        <button
-          className="next-button"
-          onClick={nextSlide}
-          aria-label="Посмотреть следующий слайд"
-        >
-          &gt;
-        </button>
+    <>
+      <div className="slider__slider-img">
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt={`Slide ${index}`}
+            style={{ display: index === currentSlide ? 'block' : 'none' }}
+          />
+        ))}
       </div>
-    </div>
+      <button
+        className="prev-button"
+        onClick={prevSlide}
+        aria-label="Посмотреть предыдущий слайд"
+      >
+        &lt;
+      </button>
+      <button
+        className="next-button"
+        onClick={nextSlide}
+        aria-label="Посмотреть следующий слайд"
+      >
+        &gt;
+      </button>
+    </>
   );
 };
 
