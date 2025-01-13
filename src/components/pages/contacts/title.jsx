@@ -1,9 +1,7 @@
-export default function Title(){
-    return(
-        <>
-            <h1 className="main__container-box-1-title">
-                Связаться со мной:
-            </h1>
-        </>
-    )
+import React from 'react';
+
+export default function Title() {
+  return (
+    <h1 className="modalSection__container-box-1-title">Связаться со мной:</h1>
+  );
 }
