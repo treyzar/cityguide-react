@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Footer from '../../general/footer/footer';
 import Header from '../../general/header/header';
 import Title from './title';
 import Modal from './modal';
 import Social from './mysocials';
-import './contacts.scss';
+import './contacts.scss'; // Убедитесь, что путь правильный
 
 export default function Contacts() {
   return (
