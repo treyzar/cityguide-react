@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 a {
@@ -67,9 +67,7 @@ a {
   width: 25px;
   margin: 4px 0;
   border-radius: 2px;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .navbar-toggle.active .bar:nth-child(1) {
@@ -111,7 +109,7 @@ a {
 }
 
 .navbar-menu li a::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0;
   height: 2px;
@@ -139,9 +137,7 @@ a {
     right: 0;
     opacity: 0;
     transform: translateX(100%);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .navbar-menu.active {
     display: flex;
