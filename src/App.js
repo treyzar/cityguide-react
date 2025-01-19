@@ -21,18 +21,18 @@ import LogoLink from './components/general/header/logolink.jsx';
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="main" replace />} />
-        <Route path="/main" element={<Main />} />
-        <Route path="/main" element={<LogoLink />} />
-        <Route path="/sign" element={<Sign />} />
-        <Route path="/attractions" element={<Attractions />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path='/attractions/:id' element={<Info/>} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="main" replace />} />
+          <Route path="/main" element={<Main />} />
+          <Route path="/sign" element={<Sign />} />
+          <Route path="/attractions" element={<Attractions />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/attraction/:id" element={<Info />} />{' '}
+          {/* Исправленный путь */}
+        </Routes>
+      </Router>
     </QueryClientProvider>
   );
 }
