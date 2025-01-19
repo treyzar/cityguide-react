@@ -13,8 +13,6 @@ body {
   background-color: rgba(0, 0, 0, 0.203);
 }
 
-
-
 .registration-form {
   height: 440px;
   width: 400px;
@@ -89,8 +87,8 @@ body {
   cursor: pointer;
   transition: background-color 0.5s linear;
 }
-.submit-button:hover{
-    background-color: rgba(0, 0, 0, 0.084);
+.submit-button:hover {
+  background-color: rgba(0, 0, 0, 0.084);
 }
 
 .have-account {
@@ -132,7 +130,6 @@ body {
 }
 
 @media (max-width: 401px) {
-  
   .registration-form {
     height: auto;
     width: 90%;
@@ -168,5 +165,121 @@ body {
   .register-button {
     padding: 12px 0;
     font-size: 16px;
+  }
+}
+
+.info-reviews-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .info-review {
+    background-color: #3a3a3a;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 600px;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .review-content {
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .review-name {
+          font-weight: bold;
+          font-size: 1.1em;
+          color: #f5f5f5;
+        }
+
+        .review-actions {
+          display: flex;
+          gap: 10px;
+
+          .info-edit-button,
+          .info-delete-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+
+          .info-edit-button {
+            background-color: #848484; // Серый
+            color: white;
+          }
+
+          .info-delete-button {
+            background-color: #5a5a5a; // Темно-серый
+            color: white;
+          }
+        }
+      }
+
+      .review-divider {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 10px 0;
+      }
+
+      .review-text {
+        font-size: 1em;
+        color: #ccc;
+      }
+    }
+
+    .edit-review-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .edit-review-input,
+      .edit-review-textarea {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #2d2d2d;
+        color: #f5f5f5;
+        font-size: 1em;
+
+        &:focus {
+          outline: none;
+          border-color: #848484;
+        }
+      }
+
+      .save-review-button {
+        padding: 8px 12px;
+        background-color: #6c757d; // Серый
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #5a5a5a;
+        }
+      }
+    }
   }
 }
