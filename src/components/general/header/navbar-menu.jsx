@@ -47,11 +47,16 @@ export default function NavbarMenu({ isMenuOpen }) {
         )}
 
         {user?.online ? (
-          <li className="navbar-menu-text">
-            <Link to="/logout" className="navbar-menu-text">
-              Выйти
-            </Link>
-          </li>
+          <>
+            <li className="navbar-menu-text">
+              <span className="navbar-username">{user.username}</span>
+            </li>
+            <li className="navbar-menu-text">
+              <Link to="/logout" className="navbar-menu-text">
+                Выйти
+              </Link>
+            </li>
+          </>
         ) : (
           <>
             {location.pathname !== '/registration' && (
