@@ -4,27 +4,28 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Form = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async event => {
     event.preventDefault();
 
-    if (!validateInput(username, password)) {
+    if (!validateInput(username, email, password)) {
       alert(
-        'Пожалуйста, убедитесь, что имя пользователя и пароль соответствуют требованиям.'
+        'Пожалуйста, убедитесь, что имя пользователя, email и пароль соответствуют требованиям.'
       );
       return;
     }
 
     try {
-      const exists = await checkUsername(username);
+      const exists = await checkEmail(email);
       if (exists) {
-        alert('Ошибка, такое имя пользователя уже есть');
+        alert('Ошибка, такой email уже зарегистрирован');
       } else {
-        await registerUser(username, password);
+        await registerUser(username, email, password);
         alert('Регистрация прошла успешно!');
-        navigate('/signin'); // Редирект на страницу входа
+        navigate('/sign');
       }
     } catch (error) {
       console.error('Ошибка:', error);
@@ -32,9 +33,13 @@ const Form = () => {
     }
   };
 
-  const validateInput = (username, password) => {
+  const validateInput = (username, email, password) => {
     if (username.length < 3 || username.length > 20) {
       alert('Имя пользователя должно быть от 3 до 20 символов.');
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Пожалуйста, введите корректный email.');
       return false;
     }
     if (password.length < 6) {
@@ -44,15 +49,15 @@ const Form = () => {
     return true;
   };
 
-  const checkUsername = async username => {
+  const checkEmail = async email => {
     const response = await fetch(
       'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info'
     );
     const users = await response.json();
-    return users.some(user => user.username === username);
+    return users.some(user => user.email === email);
   };
 
-  const registerUser = async (username, password) => {
+  const registerUser = async (username, email, password) => {
     const response = await fetch(
       'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info',
       {
@@ -60,7 +65,7 @@ const Form = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, email, password }),
       }
     );
 
@@ -90,7 +95,14 @@ const Form = () => {
         value={username}
         onChange={e => setUsername(e.target.value)}
       />
-      <br />
+      <Input
+        type="email"
+        id="email"
+        name="email"
+        place="Введите email..."
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
       <Input
         type="password"
         id="password"
