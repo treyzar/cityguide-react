@@ -16,7 +16,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
-import LogoLink from './components/general/header/logolink.jsx';
 
 function App() {
   return (
@@ -30,7 +29,6 @@ function App() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/attraction/:id" element={<Info />} />{' '}
-          {/* Исправленный путь */}
         </Routes>
       </Router>
     </QueryClientProvider>
