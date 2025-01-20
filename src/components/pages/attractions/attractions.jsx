@@ -64,7 +64,9 @@ const AttractionsList = () => {
       order,
     ],
     queryFn: fetchAttractions,
-    keepPreviousData: true,
+    keepPreviousData: true, 
+    staleTime: 1000 * 60 * 5, 
+    gcTime: 1000 * 60 * 10, 
   });
 
   const matchesAllConditions = item => {
