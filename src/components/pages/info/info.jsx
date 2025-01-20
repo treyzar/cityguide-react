@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Header from '../../general/header/header';
 import Footer from '../../general/footer/footer';
 import './info.scss';
 
 const Info = () => {
   const { id } = useParams();
-  const [attraction, setAttraction] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -18,105 +18,34 @@ const Info = () => {
   const [editingReview, setEditingReview] = useState(null);
   const [editedReviewText, setEditedReviewText] = useState('');
 
-  useEffect(() => {
-    const fetchAttraction = async () => {
-      try {
-        const response = await fetch(
-          `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/?id=${id}`
-        );
-        if (!response.ok) {
-          throw new Error('Ошибка при загрузке данных');
-        }
-        const data = await response.json();
 
-        if (!data || data.length === 0) {
-          throw new Error('Достопримечательность не найдена');
-        }
-
-        const attractionData = Array.isArray(data) ? data[0] : data;
-
-        if (!Array.isArray(attractionData.reviews)) {
-          attractionData.reviews = [];
-        }
-
-        setAttraction(attractionData);
-      } catch (error) {
-        console.error('Ошибка:', error);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAttraction();
-  }, [id]);
-
-  const handleSubmitReview = async e => {
-    e.preventDefault();
-
-    if (!reviewName.trim() || !reviewText.trim()) {
-      setError('Имя и текст отзыва не могут быть пустыми.');
-      return;
-    }
-
-    const newReview = {
-      name: reviewName,
-      text: reviewText,
-    };
-
-    try {
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: async () => {
       const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/?id=${id}`
+        'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info'
       );
       if (!response.ok) {
-        throw new Error(`Ошибка при загрузке данных: ${response.statusText}`);
+        throw new Error('Ошибка при загрузке данных пользователя');
       }
-      const data = await response.json();
+      const users = await response.json();
+      const currentUser = users.find(user => user.online === true);
+      return currentUser || null;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 
-      if (!data || data.length === 0) {
-        throw new Error('Достопримечательность не найдена');
-      }
-
-      const attractionData = Array.isArray(data) ? data[0] : data;
-
-      const updatedReviews = [...attractionData.reviews, newReview];
-
-      const updateResponse = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attractionData.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...attractionData,
-            reviews: updatedReviews,
-          }),
-        }
-      );
-
-      if (!updateResponse.ok) {
-        throw new Error(
-          `Ошибка при обновлении отзыва: ${updateResponse.statusText}`
-        );
-      }
-
-      const responseData = await updateResponse.json();
-
-      setAttraction(responseData);
-      setReviewName('');
-      setReviewText('');
-      setError(null); 
-    } catch (error) {
-      console.error('Ошибка при добавлении отзыва:', error);
-      setError(
-        `Не удалось отправить отзыв. Пожалуйста, попробуйте снова. Ошибка: ${error.message}`
-      );
-    }
-  };
-
-  const handleDeleteReview = async name => {
-    try {
+  const {
+    data: attraction,
+    isLoading: isAttractionLoading,
+    error: attractionError,
+  } = useQuery({
+    queryKey: ['attraction', id],
+    queryFn: async () => {
       const response = await fetch(
         `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/?id=${id}`
       );
@@ -124,42 +53,120 @@ const Info = () => {
         throw new Error('Ошибка при загрузке данных');
       }
       const data = await response.json();
-
       if (!data || data.length === 0) {
         throw new Error('Достопримечательность не найдена');
       }
-
       const attractionData = Array.isArray(data) ? data[0] : data;
+      if (!Array.isArray(attractionData.reviews)) {
+        attractionData.reviews = [];
+      }
+      return attractionData;
+    },
+  });
 
-      const updatedReviews = attractionData.reviews.filter(
-        review => review.name !== name
-      );
-
-      const updateResponse = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attractionData.id}`,
+  const addReviewMutation = useMutation({
+    mutationFn: async newReview => {
+      const response = await fetch(
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            ...attractionData,
+            ...attraction,
+            reviews: [...attraction.reviews, newReview],
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Ошибка при добавлении отзыва');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['attraction', id]);
+      setReviewName('');
+      setReviewText('');
+    },
+  });
+
+  const deleteReviewMutation = useMutation({
+    mutationFn: async name => {
+      const updatedReviews = attraction.reviews.filter(
+        review => review.name !== name
+      );
+      const response = await fetch(
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...attraction,
             reviews: updatedReviews,
           }),
         }
       );
-
-      if (!updateResponse.ok) {
+      if (!response.ok) {
         throw new Error('Ошибка при удалении отзыва');
       }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['attraction', id]);
+    },
+  });
 
-      const responseData = await updateResponse.json();
+  const editReviewMutation = useMutation({
+    mutationFn: async ({ name, text }) => {
+      const updatedReviews = attraction.reviews.map(review =>
+        review.name === name ? { ...review, text } : review
+      );
+      const response = await fetch(
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...attraction,
+            reviews: updatedReviews,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Ошибка при редактировании отзыва');
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['attraction', id]);
+      setEditingReview(null);
+      setEditedReviewText('');
+    },
+  });
 
-      setAttraction(responseData);
-    } catch (error) {
-      console.error('Ошибка при удалении отзыва:', error);
-      setError('Не удалось удалить отзыв. Пожалуйста, попробуйте снова.');
+  const handleSubmitReview = e => {
+    e.preventDefault();
+
+    if (!user) {
+      alert('Пожалуйста, войдите, чтобы оставить отзыв.');
+      return;
     }
+
+    if (!reviewName.trim() || !reviewText.trim()) {
+      alert('Имя и текст отзыва не могут быть пустыми.');
+      return;
+    }
+
+    addReviewMutation.mutate({ name: reviewName, text: reviewText });
+  };
+
+  const handleDeleteReview = name => {
+    deleteReviewMutation.mutate(name);
   };
 
   const handleEditReview = (name, text) => {
@@ -167,55 +174,8 @@ const Info = () => {
     setEditedReviewText(text);
   };
 
-  const handleSaveReview = async name => {
-    try {
-      const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/?id=${id}`
-      );
-      if (!response.ok) {
-        throw new Error('Ошибка при загрузке данных');
-      }
-      const data = await response.json();
-
-      if (!data || data.length === 0) {
-        throw new Error('Достопримечательность не найдена');
-      }
-
-      const attractionData = Array.isArray(data) ? data[0] : data;
-
-      const updatedReviews = attractionData.reviews.map(review =>
-        review.name === name ? { ...review, text: editedReviewText } : review
-      );
-
-      const updateResponse = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attractionData.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...attractionData,
-            reviews: updatedReviews,
-          }),
-        }
-      );
-
-      if (!updateResponse.ok) {
-        throw new Error('Ошибка при обновлении отзыва');
-      }
-
-      const responseData = await updateResponse.json();
-
-      setAttraction(responseData);
-      setEditingReview(null);
-      setEditedReviewText('');
-    } catch (error) {
-      console.error('Ошибка при редактировании отзыва:', error);
-      setError(
-        'Не удалось отредактировать отзыв. Пожалуйста, попробуйте снова.'
-      );
-    }
+  const handleSaveReview = name => {
+    editReviewMutation.mutate({ name, text: editedReviewText });
   };
 
   const openFullscreen = index => {
@@ -239,12 +199,12 @@ const Info = () => {
     }
   };
 
-  if (isLoading) {
+  if (isAttractionLoading || isUserLoading) {
     return <div>Загрузка...</div>;
   }
 
-  if (error) {
-    return <div>Ошибка: {error}</div>;
+  if (attractionError || userError) {
+    return <div>Ошибка: {attractionError?.message || userError?.message}</div>;
   }
 
   if (!attraction) {
@@ -387,31 +347,40 @@ const Info = () => {
           )}
         </div>
 
-        <form className="info-review-form" onSubmit={handleSubmitReview}>
-          <h3>Добавить отзыв</h3>
-          <input
-            type="text"
-            id="review-name"
-            name="reviewName"
-            placeholder="Ваше имя"
-            className="info-form-input"
-            value={reviewName}
-            onChange={e => setReviewName(e.target.value)}
-            required
-          />
-          <textarea
-            id="review-text"
-            name="reviewText"
-            placeholder="Ваш отзыв"
-            className="info-form-textarea"
-            value={reviewText}
-            onChange={e => setReviewText(e.target.value)}
-            required
-          />
-          <button type="submit" className="info-form-button">
-            Отправить отзыв
-          </button>
-        </form>
+        {user ? (
+          <form className="info-review-form" onSubmit={handleSubmitReview}>
+            <h3>Добавить отзыв</h3>
+            <input
+              type="text"
+              id="review-name"
+              name="reviewName"
+              placeholder="Ваше имя"
+              className="info-form-input"
+              value={reviewName}
+              onChange={e => setReviewName(e.target.value)}
+              required
+            />
+            <textarea
+              id="review-text"
+              name="reviewText"
+              placeholder="Ваш отзыв"
+              className="info-form-textarea"
+              value={reviewText}
+              onChange={e => setReviewText(e.target.value)}
+              required
+            />
+            <button type="submit" className="info-form-button">
+              Отправить отзыв
+            </button>
+          </form>
+        ) : (
+          <div className="info-review-form">
+            <h3>Чтобы оставить отзыв, пожалуйста, войдите.</h3>
+            <Link to="/sign" className="info-login-link">
+              Войти
+            </Link>
+          </div>
+        )}
       </div>
       <Footer />
     </>
