@@ -20,7 +20,7 @@ export default function Input({
         required
         minLength={min}
         maxLength={max}
-        placeholder={place}
+        placeholder=" "
         value={value}
         onChange={onChange}
       />

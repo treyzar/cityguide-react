@@ -14,11 +14,9 @@ body {
 }
 
 .registration-form {
-  height: 440px;
-  width: 400px;
-  background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
+  height: 500px;
+  width: 450px;
+  background: linear-gradient(90deg, #333, #555);
   border-radius: 10px;
   position: relative;
   top: 40%;
@@ -31,17 +29,6 @@ body {
   padding: 50px 35px;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 .registration-form * {
   color: #ffffff;
   letter-spacing: 0.5px;
@@ -56,6 +43,11 @@ body {
   text-align: center;
 }
 
+.input-container {
+  position: relative;
+  margin-top: 20px;
+}
+
 .form-input {
   display: block;
   height: 60px;
@@ -64,14 +56,31 @@ body {
   border-radius: 3px;
   padding: 0 10px;
   font-size: 14px;
-  margin-top: 20px;
   font-weight: 300;
   color: black;
   transition: background-color 0.5s ease;
 }
-.form-input:hover {
-  background: none;
-  border: 2px solid rgba(255, 255, 255, 0.1843137255);
+
+.form-input:not(:-moz-placeholder-shown) + .form-input-placeholder {
+  top: -10px;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.form-input:focus + .form-input-placeholder,
+.form-input:not(:placeholder-shown) + .form-input-placeholder {
+  top: -10px;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.form-input-placeholder {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .submit-button {
@@ -102,27 +111,9 @@ body {
   transition: color 0.2s ease-in;
   padding-left: 5px;
 }
+
 .here-link:hover {
   color: #000000;
-}
-
-.register-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.203);
-  color: #080710;
-  transition: background-color 1s ease, color 1s ease;
-  padding: 15px 0;
-  font-size: 18px;
-  font-weight: 600;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.register-button:hover {
-  background-color: #000000;
-  color: #ffffff;
 }
 
 @media (max-width: 401px) {
@@ -153,105 +144,4 @@ body {
   .here-link {
     font-size: 14px;
   }
-  .register-button {
-    padding: 12px 0;
-    font-size: 16px;
-  }
-}
-.info-reviews-container {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.info-reviews-container .info-review {
-  background-color: #3a3a3a;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 10px;
-  width: 100%;
-  max-width: 600px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.info-reviews-container .info-review:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-.info-reviews-container .info-review .review-content .review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.info-reviews-container .info-review .review-content .review-header .review-name {
-  font-weight: bold;
-  font-size: 1.1em;
-  color: #f5f5f5;
-}
-.info-reviews-container .info-review .review-content .review-header .review-actions {
-  display: flex;
-  gap: 10px;
-}
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-edit-button,
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-delete-button {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
-}
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-edit-button:hover,
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-delete-button:hover {
-  opacity: 0.8;
-}
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-edit-button {
-  background-color: #848484;
-  color: white;
-}
-.info-reviews-container .info-review .review-content .review-header .review-actions .info-delete-button {
-  background-color: #5a5a5a;
-  color: white;
-}
-.info-reviews-container .info-review .review-content .review-divider {
-  border: 0;
-  border-top: 1px solid #ddd;
-  margin: 10px 0;
-}
-.info-reviews-container .info-review .review-content .review-text {
-  font-size: 1em;
-  color: #ccc;
-}
-.info-reviews-container .info-review .edit-review-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.info-reviews-container .info-review .edit-review-form .edit-review-input,
-.info-reviews-container .info-review .edit-review-form .edit-review-textarea {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #2d2d2d;
-  color: #f5f5f5;
-  font-size: 1em;
-}
-.info-reviews-container .info-review .edit-review-form .edit-review-input:focus,
-.info-reviews-container .info-review .edit-review-form .edit-review-textarea:focus {
-  outline: none;
-  border-color: #848484;
-}
-.info-reviews-container .info-review .edit-review-form .save-review-button {
-  padding: 8px 12px;
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
-}
-.info-reviews-container .info-review .edit-review-form .save-review-button:hover {
-  background-color: #5a5a5a;
 }

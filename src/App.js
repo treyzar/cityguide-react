@@ -13,6 +13,7 @@ import Registration from './components/pages/registration/registration.jsx';
 import Main from './components/pages/main/main.jsx';
 import Info from './components/pages/info/info.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Logout from './components/general/header/Logout.jsx';
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/attraction/:id" element={<Info />} />{' '}
+          <Route path='logout/' element={<Logout/>} />
         </Routes>
       </Router>
     </QueryClientProvider>

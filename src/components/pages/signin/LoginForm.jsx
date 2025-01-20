@@ -1,9 +1,9 @@
-import Input from '../registration/input';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Input from '../registration/input';
 
-export default function Form() {
-  const [username, setUsername] = useState('');
+const LoginForm = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -18,16 +18,38 @@ export default function Form() {
         throw new Error('Ошибка сети: ' + response.statusText);
       }
       const users = await response.json();
+
       const user = users.find(
-        user => user.username === username && user.password === password
+        user => user.email === email && user.password === password
       );
 
       if (user) {
-        alert('Вход выполнен успешно!');
+        const updateResponse = await fetch(
+          `https://672b2e13976a834dd025f082.mockapi.io/travelguide/info/${user.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ online: true }),
+          }
+        );
+
+        if (!updateResponse.ok) {
+          throw new Error('Ошибка при обновлении статуса пользователя');
+        }
+
+        const updatedUserResponse = await fetch(
+          `https://672b2e13976a834dd025f082.mockapi.io/travelguide/info/${user.id}`
+        );
+        const updatedUser = await updatedUserResponse.json();
+
         sessionStorage.setItem('sign', 'true');
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
+
         navigate('/main');
       } else {
-        alert('Ошибка входа: Неверное имя пользователя или пароль');
+        alert('Ошибка входа: Неверный email или пароль');
       }
     } catch (error) {
       console.error('Ошибка:', error);
@@ -39,16 +61,13 @@ export default function Form() {
     <form className="registration-form" id="loginForm" onSubmit={handleSubmit}>
       <h3 className="form-label">Вход</h3>
       <Input
-        type="text"
-        id="username"
-        name="username"
-        min="3"
-        max="20"
-        place="Введите имя пользователя..."
-        value={username}
-        onChange={e => setUsername(e.target.value)}
+        type="email"
+        id="email"
+        name="email"
+        place="Введите email..."
+        value={email}
+        onChange={e => setEmail(e.target.value)}
       />
-      <br />
       <Input
         type="password"
         id="password"
@@ -70,4 +89,6 @@ export default function Form() {
       </p>
     </form>
   );
-}
+};
+
+export default LoginForm;
