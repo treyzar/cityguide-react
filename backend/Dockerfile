@@ -1,5 +1,5 @@
 # Используем официальный образ Python
-FROM python:3.9-slim
+FROM python:3.10-bookworm
 
 # Устанавливаем зависимости для сборки Python-пакетов (если нужны)
 RUN apt-get update && apt-get install -y gcc python3-dev
