@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import Header from '../../general/header/header';
 import Footer from '../../general/footer/footer';
 import FirstSection from './firstSection.jsx/firstSection';
@@ -14,4 +15,5 @@ export default function Main() {
       <Footer />
     </>
   );
-}
+} 
+

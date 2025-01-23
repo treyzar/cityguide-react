@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import logo from './images/logo2.png';
 import './header.css';
 import Navbar from './navbar';
 import NavbarMenu from './navbar-menu';

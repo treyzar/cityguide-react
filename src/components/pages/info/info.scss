@@ -201,7 +201,7 @@ a {
       display: flex;
       gap: 10px;
 
-      .info-edit-button,
+      .edit-review-button,
       .info-delete-button,
       .info-save-button {
         padding: 5px 10px;
@@ -217,17 +217,17 @@ a {
       }
 
       .info-edit-button {
-        background-color: #848484; // Серый
+        background-color: #848484;
         color: white;
       }
 
       .info-delete-button {
-        background-color: #5a5a5a; // Темно-серый
+        background-color: #5a5a5a; 
         color: white;
       }
 
       .info-save-button {
-        background-color: #6c757d; // Серый
+        background-color: #6c757d; 
         color: white;
       }
     }
@@ -315,17 +315,17 @@ a {
   }
 
   .info-edit-button {
-    background-color: #848484; // Серый
+    background-color: #848484;
     color: white;
   }
 
   .info-delete-button {
-    background-color: #5a5a5a; // Темно-серый
+    background-color: #5a5a5a; 
     color: white;
   }
 
   .info-save-button {
-    background-color: #6c757d; // Серый
+    background-color: #6c757d;
     color: white;
   }
 }
@@ -345,4 +345,9 @@ a {
     outline: none;
     border-color: #848484;
   }
+}
+
+.line{
+  background-color: red;
+  color: red;
 }

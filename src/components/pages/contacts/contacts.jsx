@@ -4,7 +4,7 @@ import Header from '../../general/header/header';
 import Title from './title';
 import Modal from './modal';
 import Social from './mysocials';
-import './contacts.scss'; // Убедитесь, что путь правильный
+import './contacts.scss'; 
 
 export default function Contacts() {
   return (

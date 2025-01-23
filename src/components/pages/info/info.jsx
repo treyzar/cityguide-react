@@ -1,40 +1,22 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Header from '../../general/header/header';
 import Footer from '../../general/footer/footer';
+import { UserContext } from '../../context/UserContext';
+import AttractionInfo from './AttractionInfo';
+import ReviewList from './ReviewList';
+import ReviewForm from './reviewForm';
 import './info.scss';
 
 const Info = () => {
   const { id } = useParams();
   const queryClient = useQueryClient();
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const { user } = useContext(UserContext);
 
   const [reviewText, setReviewText] = useState('');
   const [editingReview, setEditingReview] = useState(null);
   const [editedReviewText, setEditedReviewText] = useState('');
-
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: async () => {
-      const response = await fetch(
-        'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info'
-      );
-      if (!response.ok) {
-        throw new Error('Ошибка при загрузке данных пользователя');
-      }
-      const users = await response.json();
-      const currentUser = users.find(user => user.online === true);
-      return currentUser || null;
-    },
-    staleTime: 1000 * 60 * 5,
-  });
 
   const {
     data: attraction,
@@ -44,7 +26,7 @@ const Info = () => {
     queryKey: ['attraction', id],
     queryFn: async () => {
       const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/?id=${id}`
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd?id=${id}`
       );
       if (!response.ok) {
         throw new Error('Ошибка при загрузке данных');
@@ -53,32 +35,45 @@ const Info = () => {
       if (!data || data.length === 0) {
         throw new Error('Достопримечательность не найдена');
       }
-      const attractionData = Array.isArray(data) ? data[0] : data;
-      if (!Array.isArray(attractionData.reviews)) {
-        attractionData.reviews = [];
-      }
-      return attractionData;
+      return data[0];
     },
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+  });
+
+  const {
+    data: reviews,
+    isLoading: isReviewsLoading,
+    error: reviewsError,
+  } = useQuery({
+    queryKey: ['reviews', id],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/reviews`
+      );
+      if (!response.ok) {
+        throw new Error('Ошибка при загрузке отзывов');
+      }
+      const data = await response.json();
+      return data.filter(review => review.asdId === id);
+    },
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
   });
 
   const addReviewMutation = useMutation({
     mutationFn: async newReview => {
-      if (!attraction || !attraction.id) {
-        throw new Error('Достопримечательность не найдена');
-      }
-
-      const updatedReviews = [...attraction.reviews, newReview];
-
       const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/reviews`,
         {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            ...attraction,
-            reviews: updatedReviews,
+            asdId: id,
+            name: user.username,
+            text: reviewText,
           }),
         }
       );
@@ -89,26 +84,21 @@ const Info = () => {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['attraction', id]);
+      queryClient.invalidateQueries(['reviews', id]);
       setReviewText('');
     },
   });
 
   const deleteReviewMutation = useMutation({
-    mutationFn: async index => {
-      const updatedReviews = attraction.reviews.filter((_, i) => i !== index);
-
+    mutationFn: async reviewId => {
       const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/reviews/${reviewId}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            ...attraction,
-            reviews: updatedReviews,
-          }),
+          body: JSON.stringify({ isDeleted: true }),
         }
       );
 
@@ -118,26 +108,24 @@ const Info = () => {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['attraction', id]);
+      queryClient.invalidateQueries(['reviews', id]);
+    },
+    onError: error => {
+      console.error('Ошибка при удалении отзыва:', error);
+      alert('Не удалось удалить отзыв. Проверьте, существует ли отзыв.');
     },
   });
 
   const editReviewMutation = useMutation({
-    mutationFn: async ({ index, text }) => {
-      const updatedReviews = [...attraction.reviews];
-      updatedReviews[index].text = text;
-
+    mutationFn: async ({ reviewId, text }) => {
       const response = await fetch(
-        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attraction.id}`,
+        `https://672b2e13976a834dd025f082.mockapi.io/travelguide/reviews/${reviewId}`,
         {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            ...attraction,
-            reviews: updatedReviews,
-          }),
+          body: JSON.stringify({ text }),
         }
       );
 
@@ -147,7 +135,7 @@ const Info = () => {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['attraction', id]);
+      queryClient.invalidateQueries(['reviews', id]);
       setEditingReview(null);
       setEditedReviewText('');
     },
@@ -155,229 +143,71 @@ const Info = () => {
 
   const handleSubmitReview = e => {
     e.preventDefault();
-
     if (!user) {
       alert('Пожалуйста, войдите, чтобы оставить отзыв.');
       return;
     }
-
     if (!reviewText.trim()) {
       alert('Текст отзыва не может быть пустым.');
       return;
     }
-
-    const newReview = {
-      name: String(user.name || ''),
-      text: String(reviewText || ''),
-    };
-
-    addReviewMutation.mutate(newReview);
+    addReviewMutation.mutate({
+      asdId: id,
+      name: user.username,
+      text: reviewText,
+    });
   };
 
-  const handleDeleteReview = index => {
-    deleteReviewMutation.mutate(index);
+  const handleDeleteReview = reviewId => {
+    const reviewToDelete = reviews.find(review => review.id === reviewId);
+    if (!reviewToDelete) {
+      alert('Отзыв не найден.');
+      return;
+    }
+
+    if (window.confirm('Вы уверены, что хотите удалить этот отзыв?')) {
+      deleteReviewMutation.mutate(reviewId);
+    }
   };
 
-  const handleEditReview = (index, text) => {
-    setEditingReview(index);
+  const handleEditReview = (reviewId, text) => {
+    setEditingReview(reviewId);
     setEditedReviewText(text);
   };
 
-  const handleSaveReview = index => {
-    editReviewMutation.mutate({ index, text: editedReviewText });
+  const handleSaveReview = reviewId => {
+    editReviewMutation.mutate({ reviewId, text: editedReviewText });
   };
 
-  const openFullscreen = index => {
-    setCurrentImageIndex(index);
-    setIsFullscreen(true);
-  };
-
-  const closeFullscreen = () => {
-    setIsFullscreen(false);
-  };
-
-  const showPrevImage = () => {
-    if (currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
-    }
-  };
-
-  const showNextImage = () => {
-    if (currentImageIndex < (attraction?.images?.length || 0) - 1) {
-      setCurrentImageIndex(currentImageIndex + 1);
-    }
-  };
-
-  if (isAttractionLoading || isUserLoading) {
+  if (isAttractionLoading || isReviewsLoading) {
     return <div>Загрузка...</div>;
   }
-
-  if (attractionError || userError) {
-    return <div>Ошибка: {attractionError?.message || userError?.message}</div>;
-  }
-
-  if (!attraction) {
-    return <div>Достопримечательность не найдена.</div>;
-  }
-
-  const mapUrl =
-    attraction.map && typeof attraction.map === 'string'
-      ? attraction.map.replace(/&amp;/g, '&')
-      : '';
 
   return (
     <>
       <Header />
       <div className="info-container">
-        <div className="info-card">
-          <h2 className="info-title">{attraction.name}</h2>
-          <div className="info-image-map-container">
-            <div className="info-gallery">
-              {attraction.images && attraction.images.length > 0 ? (
-                attraction.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => openFullscreen(index)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        openFullscreen(index);
-                      }
-                    }}
-                    style={{ border: 'none', background: 'none', padding: 0 }}
-                    aria-label={`Открыть изображение ${index + 1} в полноэкранном режиме`}
-                  >
-                    <img
-                      src={image}
-                      alt={`Изображение ${index + 1}`}
-                      className="info-gallery-image"
-                    />
-                  </button>
-                ))
-              ) : (
-                <p>Изображения отсутствуют</p>
-              )}
-            </div>
-            {mapUrl && (
-              <iframe src={mapUrl} title="Карта" className="info-map"></iframe>
-            )}
-          </div>
-          {attraction.description2 ? (
-            <p className="info-description">{attraction.description2}</p>
-          ) : (
-            <p>Описание отсутствует</p>
-          )}
-          <Link to="/attractions" className="info-back-button">
-            Вернуться назад
-          </Link>
-        </div>
-
-        {isFullscreen && (
-          <div className="info-fullscreen-gallery active">
-            <img
-              src={attraction.images[currentImageIndex]}
-              alt="Полноэкранное изображение"
-              className="info-fullscreen-image"
-            />
-            <button
-              className="info-gallery-button info-close-gallery"
-              onClick={closeFullscreen}
-              aria-label="Закрыть полноэкранный режим"
-            >
-              &times;
-            </button>
-            <button
-              className="info-gallery-button info-prev-image"
-              onClick={showPrevImage}
-              aria-label="Предыдущее изображение"
-            >
-              &lt;
-            </button>
-            <button
-              className="info-gallery-button info-next-image"
-              onClick={showNextImage}
-              aria-label="Следующее изображение"
-            >
-              &gt;
-            </button>
-          </div>
-        )}
-
-        <div className="info-reviews-container">
-          <h3>Отзывы</h3>
-          {attraction.reviews && attraction.reviews.length > 0 ? (
-            attraction.reviews.map((review, index) => (
-              <div key={index} className="info-review">
-                <div className="review-content">
-                  <div className="review-header">
-                    <div className="review-name">{review.name}</div>
-                    <div className="review-actions">
-                      {editingReview === index ? (
-                        <button
-                          onClick={() => handleSaveReview(index)}
-                          className="info-save-button"
-                        >
-                          Сохранить
-                        </button>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => handleEditReview(index, review.text)}
-                            className="info-edit-button"
-                          >
-                            Редактировать
-                          </button>
-                          <button
-                            onClick={() => handleDeleteReview(index)}
-                            className="info-delete-button"
-                          >
-                            Удалить
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  <hr className="review-divider" />
-                  {editingReview === index ? (
-                    <textarea
-                      className="info-edit-review-textarea"
-                      value={editedReviewText}
-                      onChange={e => setEditedReviewText(e.target.value)}
-                    />
-                  ) : (
-                    <div className="review-text">{review.text}</div>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>Отзывов пока нет.</p>
-          )}
-        </div>
-
-        {user ? (
-          <form className="info-review-form" onSubmit={handleSubmitReview}>
-            <h3>Добавить отзыв</h3>
-            <textarea
-              id="review-text"
-              name="reviewText"
-              placeholder="Ваш отзыв"
-              className="info-form-textarea"
-              value={reviewText}
-              onChange={e => setReviewText(e.target.value)}
-              required
-            />
-            <button type="submit" className="info-form-button">
-              Отправить отзыв
-            </button>
-          </form>
-        ) : (
-          <div className="info-review-form">
-            <h3>Чтобы оставить отзыв, пожалуйста, войдите.</h3>
-            <Link to="/sign" className="info-login-link">
-              Войти
-            </Link>
-          </div>
-        )}
+        <AttractionInfo
+          attraction={attraction}
+          attractionError={attractionError}
+        />
+        <ReviewList
+          reviews={reviews}
+          reviewsError={reviewsError}
+          user={user}
+          editingReview={editingReview}
+          editedReviewText={editedReviewText}
+          setEditedReviewText={setEditedReviewText}
+          handleEditReview={handleEditReview}
+          handleSaveReview={handleSaveReview}
+          handleDeleteReview={handleDeleteReview}
+        />
+        <ReviewForm
+          user={user}
+          reviewText={reviewText}
+          setReviewText={setReviewText}
+          handleSubmitReview={handleSubmitReview}
+        />
       </div>
       <Footer />
     </>

@@ -1,57 +1,65 @@
-import Input from './input';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Input from './input';
 
 const Form = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async event => {
     event.preventDefault();
+    setError('');
 
     if (!validateInput(username, email, password)) {
-      alert(
-        'Пожалуйста, убедитесь, что имя пользователя, email и пароль соответствуют требованиям.'
-      );
+      setError('Пожалуйста, проверьте введенные данные.');
       return;
     }
 
     try {
-      const exists = await checkEmail(email);
-      if (exists) {
-        alert('Ошибка, такой email уже зарегистрирован');
-      } else {
-        await registerUser(username, email, password);
+      const emailExists = await checkEmail(email);
+      if (emailExists) {
+        setError('Пользователь с таким email уже зарегистрирован.');
+        return;
+      }
+
+      const response = await registerUser(username, email, password);
+      if (response) {
         alert('Регистрация прошла успешно!');
         navigate('/sign');
       }
     } catch (error) {
       console.error('Ошибка:', error);
-      alert('Произошла ошибка при регистрации: ' + error.message);
+      setError('Произошла ошибка при регистрации: ' + error.message);
     }
   };
 
   const validateInput = (username, email, password) => {
     if (username.length < 3 || username.length > 20) {
-      alert('Имя пользователя должно быть от 3 до 20 символов.');
+      setError('Имя пользователя должно быть от 3 до 20 символов.');
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Пожалуйста, введите корректный email.');
+      setError('Пожалуйста, введите корректный email.');
       return false;
     }
-    if (password.length < 6) {
-      alert('Пароль должен содержать не менее 6 символов.');
+    if (!validatePassword(password)) {
+      setError(
+        'Пароль должен содержать минимум 8 символов и хотя бы одну букву.'
+      );
       return false;
     }
     return true;
   };
 
+  const validatePassword = password =>
+    password.length >= 8 && /[A-Za-z]/.test(password);
+
   const checkEmail = async email => {
     const response = await fetch(
-      'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info'
+      'https://6790b987af8442fd737768f7.mockapi.io/auth'
     );
     const users = await response.json();
     return users.some(user => user.email === email);
@@ -59,13 +67,18 @@ const Form = () => {
 
   const registerUser = async (username, email, password) => {
     const response = await fetch(
-      'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info',
+      'https://6790b987af8442fd737768f7.mockapi.io/auth',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          online: 'false',
+        }),
       }
     );
 
@@ -73,9 +86,7 @@ const Form = () => {
       throw new Error(`Ошибка HTTP: ${response.status}`);
     }
 
-    const data = await response.json();
-    console.log('Успешная регистрация:', data);
-    return data;
+    return await response.json();
   };
 
   return (
@@ -85,6 +96,7 @@ const Form = () => {
       onSubmit={handleSubmit}
     >
       <h3 className="form-label">Регистрация</h3>
+      {error && <p className="error-message">{error}</p>}
       <Input
         type="text"
         id="username"
@@ -107,7 +119,7 @@ const Form = () => {
         type="password"
         id="password"
         name="password"
-        min="6"
+        min="8"
         max="25"
         place="Введите пароль..."
         value={password}
@@ -117,9 +129,9 @@ const Form = () => {
         Зарегистрироваться
       </button>
       <p className="have-account">
-        Войдите
+        Уже есть аккаунт?{' '}
         <Link to="/sign" className="here-link">
-          здесь!
+          Войдите здесь!
         </Link>
       </p>
     </form>

@@ -1,65 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../registration/input';
+import { UserContext } from '../../context/UserContext';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleSubmit = async event => {
     event.preventDefault();
+    setError('');
+
+    if (!email || !password) {
+      setError('Пожалуйста, заполните все поля.');
+      return;
+    }
 
     try {
       const response = await fetch(
-        'https://672b2e13976a834dd025f082.mockapi.io/travelguide/info'
+        'https://6790b987af8442fd737768f7.mockapi.io/auth'
       );
       if (!response.ok) {
         throw new Error('Ошибка сети: ' + response.statusText);
       }
-      const users = await response.json();
 
+      const users = await response.json();
       const user = users.find(
-        user => user.email === email && user.password === password
+        u => u.email === email && u.password === password
       );
 
-      if (user) {
-        const updateResponse = await fetch(
-          `https://672b2e13976a834dd025f082.mockapi.io/travelguide/info/${user.id}`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ online: true }),
-          }
-        );
-
-        if (!updateResponse.ok) {
-          throw new Error('Ошибка при обновлении статуса пользователя');
-        }
-
-        const updatedUserResponse = await fetch(
-          `https://672b2e13976a834dd025f082.mockapi.io/travelguide/info/${user.id}`
-        );
-        const updatedUser = await updatedUserResponse.json();
-
-        sessionStorage.setItem('sign', 'true');
-        sessionStorage.setItem('user', JSON.stringify(updatedUser));
-
-        navigate('/main');
-      } else {
-        alert('Ошибка входа: Неверный email или пароль');
+      if (!user) {
+        setError('Неверный email или пароль.');
+        return;
       }
+
+      if (user.online === 'true') {
+        setError('Пользователь уже онлайн.');
+        return;
+      }
+
+      const updateResponse = await fetch(
+        `https://6790b987af8442fd737768f7.mockapi.io/auth/${user.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...user,
+            online: 'true',
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error('Ошибка при обновлении статуса пользователя');
+      }
+
+      const updatedUser = await updateResponse.json();
+
+      setUser(updatedUser);
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+      navigate('/main');
     } catch (error) {
       console.error('Ошибка:', error);
-      alert('Произошла ошибка при входе: ' + error.message);
+      setError('Произошла ошибка при входе: ' + error.message);
     }
   };
 
   return (
     <form className="registration-form" id="loginForm" onSubmit={handleSubmit}>
       <h3 className="form-label">Вход</h3>
+      {error && <p className="error-message">{error}</p>}
       <Input
         type="email"
         id="email"
