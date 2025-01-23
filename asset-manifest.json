@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d3437acb.css",
+    "main.js": "/static/js/main.2ad66eb7.js",
+    "static/js/488.f3337216.chunk.js": "/static/js/488.f3337216.chunk.js",
+    "static/media/bkg.png": "/static/media/bkg.7139a2f4b3b7cd3f1b48.png",
+    "static/media/slider1.png": "/static/media/slider1.03e83a9b21990107e236.png",
+    "static/media/logo2.png": "/static/media/logo2.8dd09c5cf2b866df18ce.png",
+    "static/media/slider5.jpg": "/static/media/slider5.e2e26e9e046bdb220a2d.jpg",
+    "static/media/slider2.jpg": "/static/media/slider2.b8043d83ddda307b0169.jpg",
+    "static/media/slider3.jpg": "/static/media/slider3.5fe40bf8c62118cccd15.jpg",
+    "static/media/icons8-vk.svg": "/static/media/icons8-vk.8cff7c2e504adf08c266f15c750cbb47.svg",
+    "static/media/icons8-телеграм.svg": "/static/media/icons8-телеграм.30f39464368b0e3426f03eb4daf834f8.svg",
+    "static/media/icons8-youtube.svg": "/static/media/icons8-youtube.5a9792a1ffe0754a3d8d7444fc3ffc9a.svg",
+    "index.html": "/index.html",
+    "main.d3437acb.css.map": "/static/css/main.d3437acb.css.map",
+    "main.2ad66eb7.js.map": "/static/js/main.2ad66eb7.js.map",
+    "488.f3337216.chunk.js.map": "/static/js/488.f3337216.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d3437acb.css",
+    "static/js/main.2ad66eb7.js"
+  ]
+}
