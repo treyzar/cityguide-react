@@ -2,6 +2,7 @@
   "name": "cityguide-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://treyzar.github.io/cityguide-react",
   "dependencies": {
     "@tanstack/react-query": "^5.64.1",
     "cra-template": "1.2.0",
@@ -16,11 +17,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write src",
     "prepare": "husky install",
-    "lint": "eslint ."
+    "lint": "eslint ."  
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +52,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "gh-pages": "^6.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "prettier": "^3.4.2",

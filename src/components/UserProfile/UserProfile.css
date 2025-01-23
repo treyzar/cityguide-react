@@ -1,0 +1,108 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.user-profile {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+.user-profile__error {
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+.user-profile__logout-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+.user-profile__logout-button:hover {
+  background-color: #bd2130;
+}
+
+.profile-header {
+  margin-bottom: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+.profile-header__title {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.profile-header__welcome {
+  font-size: 18px;
+  color: #777;
+}
+.profile-header__username {
+  font-weight: bold;
+  color: gray;
+}
+.profile-header__avatar {
+  max-width: 100px;
+  max-height: 100px;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-form__group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.profile-form__label {
+  display: block;
+  margin-bottom: 5px;
+  color: #777;
+}
+.profile-form__input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+.profile-form__input:focus {
+  border-color: gray;
+  outline: none;
+}
+.profile-form__button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: gray;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+.profile-form__button:hover {
+  background-color: rgba(0, 0, 0, 0.233);
+}
+.profile-form__button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}

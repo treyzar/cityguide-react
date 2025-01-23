@@ -13,6 +13,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
   background-color: #333;
   color: white;
   padding: 10px 20px;
@@ -91,6 +92,9 @@ a {
 
 .navbar-menu-text {
   transition: color 0.7s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .navbar-menu-text:hover {
@@ -153,4 +157,77 @@ a {
   .navbar-menu li a::after {
     display: none;
   }
+}
+.navbar-username {
+  font-weight: bold;
+  color: #ffffff;
+  margin-right: 15px;
+  font-size: 16px;
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-username:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.navbar-menu-exit {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: block;
+  mix-blend-mode: multiply;
+  margin-top: -4px;
+}
+
+.navbar-menu-exit:hover {
+  opacity: 0.8;
+}
+
+.navbar-menu-exit-container {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-menu-exit-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-menu-exit-container:hover::after {
+  background-color: #000;
+}
+
+.logout-icon {
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  mix-blend-mode: multiply;
+}
+.logout-icon:hover {
+  opacity: 0.8;
+}
+
+.navbar-avatar {
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  -o-object-fit: cover;
+     object-fit: cover;
 }

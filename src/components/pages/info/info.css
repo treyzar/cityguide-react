@@ -175,7 +175,7 @@ a {
   display: flex;
   gap: 10px;
 }
-.info-reviews-container .info-review .info-review-actions .info-edit-button,
+.info-reviews-container .info-review .info-review-actions .edit-review-button,
 .info-reviews-container .info-review .info-review-actions .info-delete-button,
 .info-reviews-container .info-review .info-review-actions .info-save-button {
   padding: 5px 10px;
@@ -185,7 +185,7 @@ a {
   font-size: 14px;
   transition: background-color 0.3s ease;
 }
-.info-reviews-container .info-review .info-review-actions .info-edit-button:hover,
+.info-reviews-container .info-review .info-review-actions .edit-review-button:hover,
 .info-reviews-container .info-review .info-review-actions .info-delete-button:hover,
 .info-reviews-container .info-review .info-review-actions .info-save-button:hover {
   opacity: 0.8;
@@ -305,4 +305,9 @@ a {
 .info-edit-review-textarea:focus {
   outline: none;
   border-color: #848484;
+}
+
+.line {
+  background-color: red;
+  color: red;
 }

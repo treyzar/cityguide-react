@@ -1,56 +1,38 @@
-import React, { useState } from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const ReviewForm = ({ attractionId, updateReviews }) => {
-  const [name, setName] = useState("");
-  const [text, setText] = useState("");
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!name || !text) {
-      alert("Пожалуйста, заполните все поля.");
-      return;
-    }
-
-    const newReview = { name, text };
-    const response = await fetch(
-      `https://672b2e13976a834dd025f082.mockapi.io/travelguide/asd/${attractionId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ reviews: [newReview] }),
-      }
+const ReviewForm = ({
+  user,
+  reviewText,
+  setReviewText,
+  handleSubmitReview,
+}) => {
+  if (!user) {
+    return (
+      <div className="info-review-form">
+        <h3>Чтобы оставить отзыв, пожалуйста, войдите.</h3>
+        <Link to="/sign" className="info-login-link">
+          Войти
+        </Link>
+      </div>
     );
-
-    if (response.ok) {
-      const data = await response.json();
-      updateReviews(data.reviews);
-      setName("");
-      setText("");
-    } else {
-      console.error("Ошибка при отправке отзыва");
-    }
-  };
+  }
 
   return (
-    <form id="review-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        id="review-name"
-        placeholder="Ваше имя"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
+    <form className="info-review-form" onSubmit={handleSubmitReview}>
+      <h3>Добавить отзыв</h3>
       <textarea
         id="review-text"
+        name="reviewText"
         placeholder="Ваш отзыв"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        className="info-form-textarea"
+        value={reviewText}
+        onChange={e => setReviewText(e.target.value)}
         required
       />
-      <button type="submit">Отправить отзыв</button>
+      <button type="submit" className="info-form-button">
+        Отправить отзыв
+      </button>
     </form>
   );
 };

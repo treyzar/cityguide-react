@@ -1,0 +1,130 @@
+$dark-gray: #333;
+$medium-gray: #555;
+$light-gray: #777;
+$blue: #007bff;
+$red: #dc3545;
+$white: #fff;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.user-profile {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid $medium-gray;
+  border-radius: 10px;
+  background-color: $dark-gray;
+  color: $white;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+
+  &__error {
+    color: $red;
+    margin-bottom: 20px;
+  }
+
+  &__logout-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: $red;
+    color: $white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($red, 10%);
+    }
+  }
+}
+
+.profile-header {
+  margin-bottom: 20px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+
+  &__title {
+    font-size: 28px;
+    color: $white;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  &__welcome {
+    font-size: 18px;
+    color: $light-gray;
+  }
+
+  &__username {
+    font-weight: bold;
+    color: gray;
+  }
+  &__avatar {
+    max-width: 100px;
+    max-height: 100px;
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+}
+
+.profile-form {
+  &__group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 5px;
+    color: $light-gray;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $medium-gray;
+    border-radius: 5px;
+    background-color: $dark-gray;
+    color: $white;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: gray;
+      outline: none;
+    }
+  }
+
+  &__button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: gray;
+    color: $white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+
+    &:hover {
+      background-color: darken(rgba(0, 0, 0, 0.233), 10%);
+    }
+
+    &:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+  }
+}
