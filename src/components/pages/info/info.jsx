@@ -7,17 +7,29 @@ import { UserContext } from '../../context/UserContext';
 import AttractionInfo from './AttractionInfo';
 import ReviewList from './ReviewList';
 import ReviewForm from './reviewForm';
+import Loader from '../../general/loader/loader';
 import './info.scss';
 
 const Info = () => {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const { user } = useContext(UserContext);
+  // const [object, setObject] = useState({ name: '', city: '' });
 
   const [reviewText, setReviewText] = useState('');
   const [editingReview, setEditingReview] = useState(null);
   const [editedReviewText, setEditedReviewText] = useState('');
 
+  // const changeDataObject = (name, city) => {
+  //   const newDataObject = {
+  //     name,
+  //     city,
+  //   };
+  //   setObject(newDataObject);
+  //   console.log(object);
+  // };
+
+  // changeDataObject('name1','city1');
   const {
     data: attraction,
     isLoading: isAttractionLoading,
@@ -180,7 +192,11 @@ const Info = () => {
   };
 
   if (isAttractionLoading || isReviewsLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   return (
