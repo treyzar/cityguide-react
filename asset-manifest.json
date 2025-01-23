@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/cityguide-react/static/css/main.7e1e3c34.css",
-    "main.js": "/cityguide-react/static/js/main.f204d9bb.js",
+    "main.js": "/cityguide-react/static/js/main.e7a57689.js",
     "static/js/488.f3337216.chunk.js": "/cityguide-react/static/js/488.f3337216.chunk.js",
     "static/media/bkg.png": "/cityguide-react/static/media/bkg.7139a2f4b3b7cd3f1b48.png",
     "static/media/slider1.png": "/cityguide-react/static/media/slider1.03e83a9b21990107e236.png",
@@ -14,11 +14,11 @@
     "static/media/icons8-youtube.svg": "/cityguide-react/static/media/icons8-youtube.5a9792a1ffe0754a3d8d7444fc3ffc9a.svg",
     "index.html": "/cityguide-react/index.html",
     "main.7e1e3c34.css.map": "/cityguide-react/static/css/main.7e1e3c34.css.map",
-    "main.f204d9bb.js.map": "/cityguide-react/static/js/main.f204d9bb.js.map",
+    "main.e7a57689.js.map": "/cityguide-react/static/js/main.e7a57689.js.map",
     "488.f3337216.chunk.js.map": "/cityguide-react/static/js/488.f3337216.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7e1e3c34.css",
-    "static/js/main.f204d9bb.js"
+    "static/js/main.e7a57689.js"
   ]
 }
